@@ -311,26 +311,31 @@ Superpowers — набор скилов для улучшения работы C
 
 ---
 
-## 11. Автоматическая установка (промпт)
+## 11. Автоматическая установка (промпты)
 
-Если Cursor и Claude Code уже установлены, можно автоматизировать настройку остального окружения.
+Установка разделена на 2 этапа:
+- **Промпт 1** — для Cursor (установка всего до MCP-плагинов)
+- **Промпт 2** — для Claude (установка Superpowers + финальная проверка)
 
-Скопируйте промпт ниже и отправьте его Claude в терминале:
+---
+
+### Промпт 1: Для Cursor
+
+Скопируйте и отправьте этот промпт в чат Cursor:
 
 ```
 Ты — установщик dev-окружения. Работаешь в терминале на текущей машине.
 
-Цель: подготовить окружение для Claude Code + MCP и skills:
+Цель: подготовить базовое окружение для Claude Code + MCP:
 - VPN (проверка, при необходимости попроси включить вручную)
 - Homebrew
 - Python
 - Node.js
 - Git
-- GitHub CLI (gh) — ТОЛЬКО установить, НЕ логинить в GitHub и НЕ просить регистрацию
+- GitHub CLI (gh) — ТОЛЬКО установить, НЕ логинить в GitHub
 - Claude Code/CLI (claude)
 - Авторизация в Claude
-- MCP/плагины: Context7, Playwright, Serena (универсальный LSP)
-- Skills: obra/superpowers
+- MCP-плагины: Context7, Playwright, Serena
 
 Правила:
 1) Сначала сделай диагностику и выведи краткий план (что уже есть / чего нет).
@@ -345,63 +350,79 @@ Superpowers — набор скилов для улучшения работы C
   - echo $SHELL
 - Проверь VPN "по факту":
   - ifconfig | egrep "utun|ppp|tun" || true
-  - (если есть) scutil --nc list || true
   - curl -s https://ifconfig.me ; echo
-Если VPN не выглядит подключенным — попроси меня включить VPN вручную и подтвердить внешнюю IP.
+Если VPN не выглядит подключенным — попроси меня включить VPN вручную.
 
 ШАГ 1 — Homebrew
 - Если brew нет: установи Homebrew официальным способом и добавь в PATH для zsh.
-- Примечание: если запросит sudo — это пароль текущего пользователя macOS (пароль входа в систему).
-- Затем:
-  - brew update
+- Примечание: если запросит sudo — это пароль текущего пользователя macOS.
+- Затем: brew update
 
 ШАГ 2 — Базовые пакеты
-- brew install python node git gh
+- brew install python node git gh uv
 
 ШАГ 3 — Claude Code
 - npm install -g @anthropic-ai/claude-code
-- Проверь:
-  - claude --version
-- Авторизация:
-  - claude auth login
+- Проверь: claude --version
+- Авторизация: claude auth login
   (откроется браузер; дождись завершения)
 
-ШАГ 4 — MCP/плагины: Context7, Playwright, Serena
+ШАГ 4 — MCP-плагины
 
-A) Playwright MCP
-- Установи как MCP сервер для Claude Code (user scope):
-  - claude mcp add --scope user playwright -- npx -y @playwright/mcp@latest
-- Проверь:
-  - claude mcp list | grep -i playwright || true
+A) Playwright MCP:
+- claude mcp add --scope user playwright -- npx -y @playwright/mcp@latest
 
-B) Context7 MCP
-- Установи Context7 MCP:
-  - claude mcp add context7 -- npx -y @upstash/context7-mcp@latest
-- Альтернативный вариант (SSE transport):
-  - claude mcp add --transport sse context7 https://mcp.context7.com/sse
-- Проверь:
-  - claude mcp list | grep -i context7 || true
+B) Context7 MCP:
+- claude mcp add context7 -- npx -y @upstash/context7-mcp@latest
 
-C) Serena MCP (универсальный LSP)
-- Требуется uv (если нет — brew install uv)
-- Добавь Serena для Claude Code:
-  - claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context claude-code --project "$(pwd)"
-- Проверь:
-  - claude mcp list | grep -i serena || true
+C) Serena MCP:
+- claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context claude-code --project "$(pwd)"
 
-ШАГ 5 — Skills: obra/superpowers
-ВАЖНО: это ставится через plugin marketplace/команды в интерактивной сессии claude, не через brew.
-- Запусти интерактивный `claude` и выполни:
-  /plugin marketplace add obra/superpowers-marketplace
-  /plugin install superpowers@superpowers-marketplace
+Проверь все плагины: claude mcp list
 
-ШАГ 6 — Финальный отчёт
-Выведи единый статус:
-- VPN (как проверялось)
-- Установлено ли: brew, python3, node/npm, git, gh, claude
-- Авторизация Claude: результат `claude auth status --text`
-- MCP сервера Claude: вывод `claude mcp list` (с выделением context7/playwright/serena)
-- Superpowers: какие команды выполнены/что осталось сделать
+ШАГ 5 — Промежуточный отчёт
+Выведи статус:
+- VPN: подключен / не подключен
+- Установлено: brew, python3, node/npm, git, gh, uv, claude
+- Авторизация Claude: результат claude auth status
+- MCP-плагины: вывод claude mcp list
+
+После этого напиши:
+"Базовая установка завершена. Теперь запусти команду `claude` в терминале и отправь ему Промпт 2 для установки Superpowers."
+```
+
+---
+
+### Промпт 2: Для Claude
+
+После выполнения Промпта 1 запустите `claude` в терминале и отправьте этот промпт:
+
+```
+Установи Superpowers и проверь окружение.
+
+ШАГ 1 — Superpowers Skills
+Выполни команды:
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
+
+ШАГ 2 — Финальная проверка окружения
+Проверь и выведи статус (установлено / не установлено) для всех пунктов:
+
+1. VPN подключение (curl -s https://ifconfig.me)
+2. Python (python3 --version)
+3. Node.js (node -v && npm -v)
+4. Homebrew (brew --version)
+5. Git (git --version)
+6. GitHub CLI (gh --version)
+7. Claude CLI (claude --version)
+8. Авторизация Claude (claude auth status)
+9. MCP-плагины (claude mcp list):
+   - Context7
+   - Playwright
+   - Serena
+10. Superpowers Skills — установлены?
+
+Выведи итоговую таблицу со статусами.
 ```
 
 ---
