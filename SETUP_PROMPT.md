@@ -64,17 +64,17 @@ A) Playwright MCP
   - claude mcp list | grep -i playwright || true
 
 B) Context7 MCP
-- Попробуй "автонастройку" через ctx7 setup:
-  - npx -y ctx7 setup --claude
-  (может открыть браузер для OAuth; дождись завершения)
-- Если setup не сработал/нужен ручной режим — попроси у меня CONTEXT7_API_KEY и сделай:
-  - claude mcp add --scope user --transport http context7 https://mcp.context7.com/mcp --header "CONTEXT7_API_KEY: <PASTE_KEY>"
+- Установи Context7 MCP:
+  - claude mcp add context7 -- npx -y @upstash/context7-mcp@latest
+- Альтернативный вариант (SSE transport):
+  - claude mcp add --transport sse context7 https://mcp.context7.com/sse
 - Проверь:
   - claude mcp list | grep -i context7 || true
 
 C) Serena MCP (универсальный LSP)
-- Добавь Serena для Claude Code (user scope):
-  - claude mcp add --scope user serena -- uvx --from git+https://github.com/oramasearch/serena serena --workspace /path/to/workspace
+- Требуется uv (если нет — brew install uv)
+- Добавь Serena для Claude Code:
+  - claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context claude-code --project "$(pwd)"
 - Проверь:
   - claude mcp list | grep -i serena || true
 
