@@ -1,6 +1,8 @@
-# Dev Environment Setup
+# Dev Environment Setup (macOS)
 
 Руководство по настройке окружения для работы с Claude Code + MCP + Superpowers на macOS.
+
+> **Версия для Windows:** [dev-environment-setup-windows](https://github.com/Afanaseva/dev-environment-setup-windows)
 
 ---
 
