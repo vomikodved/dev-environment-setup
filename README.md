@@ -245,7 +245,7 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena 
 claude mcp list | grep -i serena
 ```
 
-### D) Cartographer (карта кодовой базы)
+### D) Cartographer (карта кодовой базы) — необязательный
 
 Cartographer создаёт полную карту проекта в файле `docs/CODEBASE_MAP.md`. При старте новой сессии Claude Code читает эту карту вместо того, чтобы заново обходить весь проект — это **значительно экономит токены** на больших кодовых базах.
 
@@ -344,7 +344,6 @@ Superpowers — набор скилов для улучшения работы C
     – Context7
     – Playwright
     – Serena (универсальный LSP)
-    – Cartographer (карта кодовой базы)
 11. Настроенные скилы из ссылки https://github.com/obra/superpowers
 ```
 
@@ -374,7 +373,7 @@ Superpowers — набор скилов для улучшения работы C
 - GitHub CLI (gh) — ТОЛЬКО установить, НЕ логинить в GitHub
 - Claude Code/CLI (claude)
 - Авторизация в Claude
-- MCP-плагины: Context7, Playwright, Serena, Cartographer
+- MCP-плагины: Context7, Playwright, Serena
 
 Правила:
 1) Сначала сделай диагностику и выведи краткий план (что уже есть / чего нет).
@@ -416,13 +415,6 @@ B) Context7 MCP:
 
 C) Serena MCP:
 - claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context claude-code --project "$(pwd)"
-
-D) Cartographer (карта кодовой базы — экономит токены при старте новых задач):
-- pip install tiktoken
-- В интерактивном режиме Claude:
-  /plugin marketplace add kingbootoshi/cartographer
-  /plugin install cartographer
-- Использование: /cartographer (для проектов с 20+ файлами)
 
 Проверь все плагины: claude mcp list
 
@@ -466,7 +458,6 @@ D) Cartographer (карта кодовой базы — экономит ток�
    - Context7
    - Playwright
    - Serena
-   - Cartographer
 10. Superpowers Skills — установлены?
 
 Выведи итоговую таблицу со статусами.
