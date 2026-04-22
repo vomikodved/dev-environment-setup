@@ -122,18 +122,37 @@ claude --version
 4. Запустить установщик — он пройдёт авторизацию через GitHub и настроит Claude Code:
 
 ```bash
-npx -p github:sputnik-asgardos/llm-proxy asgardos-setup
+npx -p github:sputnik-asgardos/llm-proxy agsetup
 ```
 
 5. В терминале появится короткий код (например `WDJB-MJHT`) и ссылка `https://github.com/login/device`. Откройте ссылку, введите код, подтвердите.
-6. Дождитесь сообщения `Setup complete` — установщик пропишет прокси и токен в `~/.claude/settings.json`.
-7. Проверьте, что всё работает:
+6. Установщик пропишет прокси и токен в `~/.claude/settings.json`, добавит `ag*` команды в PATH и в конце сам проверит доступные модели:
+
+```
+Default model: zai/glm-4.6
+Also available: zai/glm-5.1, mimo/mimo-v2-pro
+```
+
+Это значит, что прокси готов.
+
+7. **Перезапустите терминал** — чтобы PATH обновился.
+8. Проверьте, что всё работает:
 
 ```bash
-claude -p "какую модель используешь"
+agclaude -p "какую модель используешь"
 ```
 
 Ожидаемый ответ содержит `glm-5.1` или `mimo` — это значит, что прокси подключён.
+
+### Сменить модель
+
+Default-модель автоматически подставляется во все `ag*`-команды. Посмотреть, что доступно, и сменить:
+
+```bash
+agmodels                              # таблица провайдеров и моделей
+agtest                                # проверить, какие модели живые
+agsetup --set-default mimo/mimo-v2-pro   # сменить default
+```
 
 ### Если не вышло
 
@@ -150,12 +169,14 @@ brew install node
 **В)** `claude` работает, но отвечает как обычный Claude (не GLM/MiMo) — перезапустите установщик:
 
 ```bash
-npx -p github:sputnik-asgardos/llm-proxy asgardos-setup
+npx -p github:sputnik-asgardos/llm-proxy agsetup
 ```
 
-**Г)** `401 unauthorized` — токен протух, повторно запустите `asgardos-setup`.
+**Г)** `401 unauthorized` — токен протух, повторно запустите `agsetup`.
 
-**Д)** Если что-то остаётся непонятным или хочется пошаговый ручной путь — см. <https://github.com/sputnik-asgardos/llm-proxy/blob/main/CLAUDE_CODE_SETUP.md>.
+**Д)** `agclaude: command not found` после установки — не перезапустили терминал, PATH ещё не подхватился. Закройте и откройте заново.
+
+**Е)** Если что-то остаётся непонятным или хочется пошаговый ручной путь — см. <https://github.com/sputnik-asgardos/llm-proxy/blob/main/docs/onboarding/claude-code-auth.md> (короткий путь) или <https://github.com/sputnik-asgardos/llm-proxy/blob/main/CLAUDE_CODE_SETUP.md> (ручной).
 
 ---
 
