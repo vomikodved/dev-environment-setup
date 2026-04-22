@@ -119,64 +119,61 @@ claude --version
 1. Открыть Cursor.
 2. **ЗАКРЫТЬ окно диалога с Cursor (панель справа) — насовсем**.
 3. Открыть терминал в Cursor.
-4. Запустить установщик — он пройдёт авторизацию через GitHub и настроит Claude Code:
+4. Скачать установщик. Два пути на выбор:
 
-```bash
-npx -p github:sputnik-asgardos/llm-proxy agsetup
-```
+   **Через браузер (проще):** открыть <https://asgardos.ai/platform/llm-proxy/>, пройти org-SSO, нажать «Скачать для Linux/macOS» — получится файл `setup.sh`.
 
-5. В терминале появится короткий код (например `WDJB-MJHT`) и ссылка `https://github.com/login/device`. Откройте ссылку, введите код, подтвердите.
-6. Установщик пропишет прокси и токен в `~/.claude/settings.json`, добавит `ag*` команды в PATH и в конце сам проверит доступные модели:
+   **Через GitHub CLI** (если уже есть `gh auth`):
 
-```
-Default model: zai/glm-4.6
-Also available: zai/glm-5.1, mimo/mimo-v2-pro
-```
+   ```bash
+   gh api repos/sputnik-asgardos/llm-proxy/contents/setup.sh \
+     -H "Accept: application/vnd.github.raw" > setup.sh
+   ```
 
-Это значит, что прокси готов.
+5. Запустить установщик — он проведёт авторизацию через GitHub и настроит Claude Code:
 
-7. **Перезапустите терминал** — чтобы PATH обновился.
-8. Проверьте, что всё работает:
+   ```bash
+   bash setup.sh
+   ```
 
-```bash
-agclaude -p "какую модель используешь"
-```
+6. В терминале появится короткий код (например `WDJB-MJHT`) и ссылка `https://github.com/login/device`. Откройте ссылку, введите код, подтвердите.
+7. Дождитесь строки `Готово. Попробуй: agclaude -p 'hi'`. Установщик положил обёртки `agclaude` / `agcodex` / `agopencode` в `~/.local/bin` и записал токен + конфиг в `~/.config/orchestra/` (default-модель `zai/glm-5.1`).
+8. **Перезапустите терминал** — чтобы PATH обновился.
+9. Проверьте, что всё работает:
+
+   ```bash
+   agclaude -p "какую модель используешь"
+   ```
 
 Ожидаемый ответ содержит `glm-5.1` или `mimo` — это значит, что прокси подключён.
 
 ### Сменить модель
 
-Default-модель автоматически подставляется во все `ag*`-команды. Посмотреть, что доступно, и сменить:
+Default-модель автоматически подставляется во все `ag*`-команды. Чтобы сменить — отредактируйте `~/.config/orchestra/config.json`, поле `defaultModel`:
 
-```bash
-agmodels                              # таблица провайдеров и моделей
-agtest                                # проверить, какие модели живые
-agsetup --set-default mimo/mimo-v2-pro   # сменить default
+```json
+{
+  "proxyBase": "https://asgardos.ai/platform/llm-proxy",
+  "actor": "your-github-login",
+  "defaultModel": "mimo/mimo-v2-pro"
+}
 ```
+
+Список валидных моделей — в [`providers.json`](https://github.com/sputnik-asgardos/llm-proxy/blob/main/providers.json) репозитория прокси.
 
 ### Если не вышло
 
-**А)** `command not found: npx` или `node --version` меньше `v20` — нужно обновить Node.js:
-
-```bash
-brew install node
-```
-
-И перезапустить терминал.
+**А)** `command not found: gh` — поставьте GitHub CLI через `brew install gh` и авторизуйтесь `gh auth login`, либо воспользуйтесь путём через браузер (см. пункт 4).
 
 **Б)** В браузере `403` / `access denied` при вводе кода — GitHub-аккаунт не в организации `sputnik-systems`. Напишите в `#dev`, чтобы добавили.
 
-**В)** `claude` работает, но отвечает как обычный Claude (не GLM/MiMo) — перезапустите установщик:
+**В)** `claude` работает, но отвечает как обычный Claude (не GLM/MiMo) — запустите `bash setup.sh` ещё раз (токен мог протухнуть или вы запускаете голый `claude` вместо `agclaude`).
 
-```bash
-npx -p github:sputnik-asgardos/llm-proxy agsetup
-```
+**Г)** `401 unauthorized` — токен протух, повторно запустите `bash setup.sh`.
 
-**Г)** `401 unauthorized` — токен протух, повторно запустите `agsetup`.
+**Д)** `agclaude: command not found` после установки — не перезапустили терминал, PATH ещё не подхватился. Закройте и откройте заново. Если и после этого не находит — добавьте `~/.local/bin` в PATH вручную.
 
-**Д)** `agclaude: command not found` после установки — не перезапустили терминал, PATH ещё не подхватился. Закройте и откройте заново.
-
-**Е)** Если что-то остаётся непонятным или хочется пошаговый ручной путь — см. <https://github.com/sputnik-asgardos/llm-proxy/blob/main/docs/onboarding/claude-code-auth.md> (короткий путь) или <https://github.com/sputnik-asgardos/llm-proxy/blob/main/CLAUDE_CODE_SETUP.md> (ручной).
+**Е)** Если что-то остаётся непонятным или хочется пошаговый ручной путь — см. <https://github.com/sputnik-asgardos/llm-proxy/blob/main/docs/onboarding/claude-code-auth.md> (короткий путь) или <https://github.com/sputnik-asgardos/llm-proxy/blob/main/CLAUDE_CODE_SETUP.md> (ручной, без установщика).
 
 ---
 
