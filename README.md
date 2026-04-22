@@ -119,16 +119,7 @@ claude --version
 1. Открыть Cursor.
 2. **ЗАКРЫТЬ окно диалога с Cursor (панель справа) — насовсем**.
 3. Открыть терминал в Cursor.
-4. Скачать установщик. Два пути на выбор:
-
-   **Через браузер (проще):** открыть <https://asgardos.ai/platform/llm-proxy/>, пройти org-SSO, нажать «Скачать для Linux/macOS» — получится файл `setup.sh`.
-
-   **Через GitHub CLI** (если уже есть `gh auth`):
-
-   ```bash
-   gh api repos/sputnik-asgardos/llm-proxy/contents/setup.sh \
-     -H "Accept: application/vnd.github.raw" > setup.sh
-   ```
+4. Скачать установщик: открыть в браузере <https://asgardos.ai/platform/llm-proxy/setup.sh>. Браузер попросит войти через GitHub (нужен аккаунт в организации `sputnik-systems`) и после входа покажет текст скрипта. Сохрани страницу как файл `setup.sh` (`File → Save Page As…` или `Cmd+S`).
 
 5. Запустить установщик — он проведёт авторизацию через GitHub и настроит Claude Code:
 
@@ -163,17 +154,15 @@ Default-модель автоматически подставляется во 
 
 ### Если не вышло
 
-**А)** `command not found: gh` — поставьте GitHub CLI через `brew install gh` и авторизуйтесь `gh auth login`, либо воспользуйтесь путём через браузер (см. пункт 4).
+**А)** В браузере `403` / `access denied` при входе или при вводе device-кода — GitHub-аккаунт не в организации `sputnik-systems`. Напишите в `#dev`, чтобы добавили.
 
-**Б)** В браузере `403` / `access denied` при вводе кода — GitHub-аккаунт не в организации `sputnik-systems`. Напишите в `#dev`, чтобы добавили.
+**Б)** `claude` работает, но отвечает как обычный Claude (не GLM/MiMo) — запустите `bash setup.sh` ещё раз (токен мог протухнуть или вы запускаете голый `claude` вместо `agclaude`).
 
-**В)** `claude` работает, но отвечает как обычный Claude (не GLM/MiMo) — запустите `bash setup.sh` ещё раз (токен мог протухнуть или вы запускаете голый `claude` вместо `agclaude`).
+**В)** `401 unauthorized` — токен протух, повторно запустите `bash setup.sh`.
 
-**Г)** `401 unauthorized` — токен протух, повторно запустите `bash setup.sh`.
+**Г)** `agclaude: command not found` после установки — не перезапустили терминал, PATH ещё не подхватился. Закройте и откройте заново. Если и после этого не находит — добавьте `~/.local/bin` в PATH вручную.
 
-**Д)** `agclaude: command not found` после установки — не перезапустили терминал, PATH ещё не подхватился. Закройте и откройте заново. Если и после этого не находит — добавьте `~/.local/bin` в PATH вручную.
-
-**Е)** Если что-то остаётся непонятным или хочется пошаговый ручной путь — см. <https://github.com/sputnik-asgardos/llm-proxy/blob/main/docs/onboarding/claude-code-auth.md> (короткий путь) или <https://github.com/sputnik-asgardos/llm-proxy/blob/main/CLAUDE_CODE_SETUP.md> (ручной, без установщика).
+**Д)** Если что-то остаётся непонятным или хочется пошаговый ручной путь — см. <https://github.com/sputnik-asgardos/llm-proxy/blob/main/CLAUDE_CODE_SETUP.md> (ручной, без установщика).
 
 ---
 
