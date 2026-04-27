@@ -13,14 +13,16 @@
 3. [Node.js](#3-nodejs)
 4. [Claude Code](#4-claude-code)
 5. [Homebrew](#5-homebrew)
-6. [Авторизация в Claude](#6-авторизация-в-claude)
-7. [Git и GitHub CLI](#7-git-и-github-cli)
-8. [MCP-плагины](#8-mcp-плагины)
-9. [Superpowers Skills](#9-superpowers-skills)
-10. [Проверка окружения](#10-проверка-окружения)
-11. [Автоматическая установка (промпты)](#11-автоматическая-установка-промпты)
+6. [jq](#6-jq)
+7. [Авторизация в Claude](#7-авторизация-в-claude)
+8. [Git и GitHub CLI](#8-git-и-github-cli)
+9. [MCP-плагины](#9-mcp-плагины)
+10. [Superpowers Skills](#10-superpowers-skills)
+11. [Проверка окружения](#11-проверка-окружения)
+12. [Автоматическая установка (промпты)](#12-автоматическая-установка-промпты)
 
 ---
+
 
 ## 1. Cursor
 
@@ -140,7 +142,25 @@ brew update
 
 ---
 
-## 6. Авторизация в Claude
+## 6. jq
+
+`jq` — утилита для работы с JSON, используется установщиком и обёртками (`agclaude`, `agopencode`).
+
+### Установка
+
+```bash
+brew install jq
+```
+
+### Проверка
+
+```bash
+jq --version
+```
+
+---
+
+## 7. Авторизация в Claude
 
 > **Используем корпоративный LLM-прокси `cc.sputnik.systems`.**
 > VPN **не нужен**, оплаченный Claude-аккаунт **не нужен** — нужен только GitHub-аккаунт, входящий в одну из двух организаций: [sputnik-systems](https://github.com/sputnik-systems) или [sputnik-asgardos](https://github.com/sputnik-asgardos).
@@ -152,11 +172,6 @@ brew update
 1. Открыть Cursor.
 2. **ЗАКРЫТЬ окно диалога с Cursor (панель справа) — насовсем**.
 3. Открыть терминал в Cursor.
-   **Предварительно:** установите `jq` (если ещё не установлен):
-   ```bash
-   brew install jq
-   ```
-
 4. Скачать установщик: открыть в браузере <https://asgardos.ai/platform/llm-proxy/setup.sh>. Браузер попросит войти через GitHub (нужен аккаунт в одной из организаций — `sputnik-systems` или `sputnik-asgardos`) и после входа покажет текст скрипта. Сохрани страницу как файл `setup.sh` (`File → Save Page As…` или `Cmd+S`).
 
 5. Запустить установщик — он проведёт авторизацию через GitHub и настроит Claude Code:
@@ -205,7 +220,7 @@ agclaude --model mimo/mimo-v2-pro -p "…"  # разовая
 ---
 
 
-## 7. Git и GitHub CLI
+## 8. Git и GitHub CLI
 
 ### Установка через Homebrew
 
@@ -224,7 +239,7 @@ gh --version
 
 ---
 
-## 8. MCP-плагины
+## 9. MCP-плагины
 
 MCP-плагины расширяют возможности Claude Code.
 
@@ -316,7 +331,7 @@ ls docs/CODEBASE_MAP.md
 
 ---
 
-## 9. Superpowers Skills
+## 10. Superpowers Skills
 
 Superpowers — набор скилов для улучшения работы Claude Code.
 
@@ -339,7 +354,7 @@ Superpowers — набор скилов для улучшения работы C
 
 ---
 
-## 10. Проверка окружения
+## 11. Проверка окружения
 
 ### Чек-лист
 
@@ -382,7 +397,7 @@ Superpowers — набор скилов для улучшения работы C
 
 ---
 
-## 11. Автоматическая установка (промпты)
+## 12. Автоматическая установка (промпты)
 
 Установка разделена на 2 этапа:
 - **Промпт 1** — для Cursor (установка всего до MCP-плагинов)
