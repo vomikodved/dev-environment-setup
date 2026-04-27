@@ -166,7 +166,7 @@ brew update
    ```
 
 6. В терминале появится короткий код (например `WDJB-MJHT`) и ссылка `https://github.com/login/device`. Откройте ссылку, введите код, подтвердите.
-7. Дождитесь строки `Готово. Попробуй: agclaude -p 'hi'`. Установщик положил обёртки `agclaude` / `agcodex` / `agopencode` в `~/.local/bin` и записал токен + конфиг в `~/.config/orchestra/` (default-модель `zai/glm-5.1`).
+7. Дождитесь строки `Готово. Попробуй: agclaude -p 'hi'`. Установщик положил обёртки `agclaude` / `agcodex` / `agopencode` в `~/.local/bin` и записал токен + конфиг в `~/.config/orchestra/` (default-модель `mimo/mimo-v2.5-pro`).
 8. **Перезапустите терминал** — чтобы PATH обновился.
 9. Проверьте, что всё работает:
 
