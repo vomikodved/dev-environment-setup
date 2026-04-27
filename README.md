@@ -12,8 +12,8 @@
 2. [Python](#2-python)
 3. [Node.js](#3-nodejs)
 4. [Claude Code](#4-claude-code)
-5. [Авторизация в Claude](#5-авторизация-в-claude)
-6. [Homebrew](#6-homebrew)
+6. [Авторизация в Claude](#5-авторизация-в-claude)
+5. [Homebrew](#6-homebrew)
 7. [Git и GitHub CLI](#7-git-и-github-cli)
 8. [MCP-плагины](#8-mcp-плагины)
 9. [Superpowers Skills](#9-superpowers-skills)
@@ -109,7 +109,38 @@ claude --version
 
 ---
 
-## 5. Авторизация в Claude
+## 5. Homebrew
+
+Homebrew — пакетный менеджер для macOS.
+
+### Проверка
+
+```bash
+brew --version
+```
+
+### Если не установлен
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+После установки добавьте в PATH (для zsh):
+
+```bash
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Обновите:
+
+```bash
+brew update
+```
+
+---
+
+## 6. Авторизация в Claude
 
 > **Используем корпоративный LLM-прокси `cc.sputnik.systems`.**
 > VPN **не нужен**, оплаченный Claude-аккаунт **не нужен** — нужен только GitHub-аккаунт, входящий в одну из двух организаций: [sputnik-systems](https://github.com/sputnik-systems) или [sputnik-asgardos](https://github.com/sputnik-asgardos).
@@ -145,21 +176,17 @@ claude --version
 
 Ожидаемый ответ содержит `glm-5.1` или `mimo` — это значит, что прокси подключён.
 
-> **`claude` тоже работает напрямую** — установщик настраивает `~/.claude/settings.json` с `apiKeyHelper` и `ANTHROPIC_BASE_URL`. Можно писать `claude -p "..."` вместо `agclaude -p "..."`. Токен обновляется автоматически при протухании.
-
 ### Сменить модель
 
-Default-модель автоматически подставляется во все `ag*`-команды. Чтобы сменить — отредактируйте `~/.config/orchestra/config.json`, поле `defaultModel`:
-
-```json
-{
-  "proxyBase": "https://asgardos.ai/platform/llm-proxy",
-  "actor": "your-github-login",
-  "defaultModel": "mimo/mimo-v2-pro"
-}
+```bash
+agclaude --set-model mimo/mimo-v2-pro     # постоянная смена
+agclaude --model mimo/mimo-v2-pro -p "…"  # разовая
 ```
 
-Список валидных моделей — в [`providers.json`](https://github.com/sputnik-asgardos/llm-proxy/blob/main/providers.json) репозитория прокси.
+Классы моделей: `strong` (GLM-5.1 / MiMo-v2-pro), `strongest` (MiMo-v2.5-pro / GLM-5.1), `fast` (GLM-5-turbo / MiMo-v2-omni).
+
+
+> **`claude` тоже работает напрямую** — установщик настраивает `~/.claude/settings.json` с `apiKeyHelper` и `ANTHROPIC_BASE_URL`. Можно писать `claude -p "..."` вместо `agclaude -p "..."`. Токен обновляется автоматически при протухании.
 
 ### Если не вышло
 
@@ -177,36 +204,6 @@ Default-модель автоматически подставляется во 
 
 ---
 
-## 6. Homebrew
-
-Homebrew — пакетный менеджер для macOS.
-
-### Проверка
-
-```bash
-brew --version
-```
-
-### Если не установлен
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-После установки добавьте в PATH (для zsh):
-
-```bash
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-Обновите:
-
-```bash
-brew update
-```
-
----
 
 ## 7. Git и GitHub CLI
 
