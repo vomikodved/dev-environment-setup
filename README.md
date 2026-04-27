@@ -121,6 +121,11 @@ claude --version
 1. Открыть Cursor.
 2. **ЗАКРЫТЬ окно диалога с Cursor (панель справа) — насовсем**.
 3. Открыть терминал в Cursor.
+   **Предварительно:** установите `jq` (если ещё не установлен):
+   ```bash
+   brew install jq
+   ```
+
 4. Скачать установщик: открыть в браузере <https://asgardos.ai/platform/llm-proxy/setup.sh>. Браузер попросит войти через GitHub (нужен аккаунт в одной из организаций — `sputnik-systems` или `sputnik-asgardos`) и после входа покажет текст скрипта. Сохрани страницу как файл `setup.sh` (`File → Save Page As…` или `Cmd+S`).
 
 5. Запустить установщик — он проведёт авторизацию через GitHub и настроит Claude Code:
@@ -428,7 +433,7 @@ Superpowers — набор скилов для улучшения работы C
 - Затем: brew update
 
 ШАГ 2 — Базовые пакеты
-- brew install python node git gh uv
+- brew install python node git gh uv jq
 
 ШАГ 3 — Claude Code
 - npm install -g @anthropic-ai/claude-code
