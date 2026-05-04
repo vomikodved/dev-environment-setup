@@ -2,7 +2,7 @@
 
 Руководство по настройке окружения для работы с Claude Code + MCP + Superpowers на macOS.
 
-> **Версия для Windows:** [dev-environment-setup-windows](https://github.com/Afanaseva/dev-environment-setup-windows)
+> **Версия для Windows:** [dev-environment-setup-windows](https://github.com/vomikodved/dev-environment-setup-windows)
 
 ---
 
@@ -181,24 +181,30 @@ jq --version
    ```
 
 6. В терминале появится короткий код (например `WDJB-MJHT`) и ссылка `https://github.com/login/device`. Откройте ссылку, введите код, подтвердите.
-7. Дождитесь строки `Готово. Попробуй: agclaude -p 'hi'`. Установщик положил обёртки `agclaude` / `agcodex` / `agopencode` в `~/.local/bin` и записал токен + конфиг в `~/.config/orchestra/` (default-модель `mimo/mimo-v2.5-pro`).
+7. Дождитесь строки `Готово. Попробуй: agclaude -p 'hi'`. Установщик положил обёртки `agclaude` / `agcodex` / `agopencode` / `agcrush` в `~/.local/bin` и записал токен + конфиг в `~/.config/orchestra/` (default-модель `kimi/kimi-for-coding`).
 8. **Перезапустите терминал** — чтобы PATH обновился.
 9. Проверьте, что всё работает:
 
    ```bash
-   agclaude -p "какую модель используешь"
+   agclaude --proxy on    # включить прокси
+agclaude --proxy off   # отключить (прямой Claude)
+agclaude --proxy status
+
+agclaude -p "какую модель используешь"
    ```
 
-Ожидаемый ответ содержит `glm-5.1` или `mimo` — это значит, что прокси подключён.
+Ожидаемый ответ содержит `kimi` или `deepseek` — это значит, что прокси подключён.
 
 ### Сменить модель
 
 ```bash
-agclaude --set-model mimo/mimo-v2-pro     # постоянная смена
-agclaude --model mimo/mimo-v2-pro -p "…"  # разовая
+agclaude --set-model kimi/kimi-for-coding     # постоянная смена
+agclaude --model kimi/kimi-for-coding -p "…"  # разовая
 ```
 
-Классы моделей: `strong` (GLM-5.1 / MiMo-v2-pro), `strongest` (MiMo-v2.5-pro / GLM-5.1), `fast` (GLM-5-turbo / MiMo-v2-omni).
+Посмотреть актуальный список: `agclaude --list-models` (динамически с прокси).
+
+Классы моделей: `strongest` (DeepSeek-v4-pro / Kimi-for-coding, premium), `strong` (Kimi-for-coding / DeepSeek-v4-flash, recommended), `fast` (GLM-5-turbo / MiMo-v2-omni, cheap).
 
 
 > **`claude` тоже работает напрямую** — установщик настраивает `~/.claude/settings.json` с `apiKeyHelper` и `ANTHROPIC_BASE_URL`. Можно писать `claude -p "..."` вместо `agclaude -p "..."`. Токен обновляется автоматически при протухании.
