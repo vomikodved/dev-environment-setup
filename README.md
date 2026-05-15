@@ -172,7 +172,7 @@ jq --version
 1. Открыть Cursor.
 2. **ЗАКРЫТЬ окно диалога с Cursor (панель справа) — насовсем**.
 3. Открыть терминал в Cursor.
-4. Скачать установщик: открыть в браузере <https://asgardos.ai/platform/llm-proxy/setup.sh>. Браузер попросит войти через GitHub (нужен аккаунт в одной из организаций — `sputnik-systems` или `sputnik-asgardos`) и после входа покажет текст скрипта. Сохрани страницу как файл `setup.sh` (`File → Save Page As…` или `Cmd+S`).
+4. Скачать установщик: открыть в браузере <https://bifrost.asgardos.ai:37620/platform/llm-proxy/setup.sh>. Браузер попросит войти через GitHub (нужен аккаунт в одной из организаций — `sputnik-systems` или `sputnik-asgardos`) и после входа покажет текст скрипта. Сохрани страницу как файл `setup.sh` (`File → Save Page As…` или `Cmd+S`).
 
 5. Запустить установщик — он проведёт авторизацию через GitHub и настроит Claude Code:
 
