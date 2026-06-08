@@ -183,17 +183,26 @@ jq --version
 6. В терминале появится короткий код (например `WDJB-MJHT`) и ссылка `https://github.com/login/device`. Откройте ссылку, введите код, подтвердите.
 7. Дождитесь строки `Готово. Попробуй: agclaude -p 'hi'`. Установщик положил обёртки `agclaude` / `agcodex` / `agopencode` / `agcrush` в `~/.local/bin` и записал токен + конфиг в `~/.config/orchestra/` (default-модель `kimi/kimi-for-coding`).
 8. **Перезапустите терминал** — чтобы PATH обновился.
-9. Проверьте, что всё работает:
+9. Проверьте Claude Code через прокси:
 
    ```bash
    agclaude --proxy on    # включить прокси
-agclaude --proxy off   # отключить (прямой Claude)
-agclaude --proxy status
+   agclaude --proxy off   # отключить (прямой Claude)
+   agclaude --proxy status
 
-agclaude -p "какую модель используешь"
+   agclaude -p "какую модель используешь"
    ```
 
-Ожидаемый ответ содержит `kimi` или `deepseek` — это значит, что прокси подключён.
+   Ожидаемый ответ содержит `kimi`, `deepseek`, `zai/glm` или другую модель прокси — значит Claude Code подключён.
+
+10. Проверьте Codex через тот же прокси:
+
+   ```bash
+   agcodex --version
+   agcodex exec "ответь одним словом: ok"
+   ```
+
+   `agcodex` — это обёртка для OpenAI Codex CLI. Она использует тот же GitHub-токен и корпоративный LLM-прокси, поэтому отдельный OpenAI-аккаунт/API key не нужен. Модель для Codex выбирается прокси автоматически; если нужно сменить — используйте `agcodex --set-model <model>` или `agcodex --list-models`.
 
 ### Сменить модель
 
@@ -213,11 +222,11 @@ agclaude --model kimi/kimi-for-coding -p "…"  # разовая
 
 **А)** В браузере `403` / `access denied` при входе или при вводе device-кода — GitHub-аккаунт не входит ни в `sputnik-systems`, ни в `sputnik-asgardos`. Напишите в `#dev`, чтобы добавили в одну из них.
 
-**Б)** `claude` работает, но отвечает как обычный Claude (не GLM/MiMo) — запустите `bash setup.sh` ещё раз (токен мог протухнуть или вы запускаете голый `claude` вместо `agclaude`).
+**Б)** `claude` работает, но отвечает как обычный Claude (не GLM/MiMo) — запустите `bash setup.sh` ещё раз (токен мог протухнуть или вы запускаете голый `claude` вместо `agclaude`). Для Codex используйте именно `agcodex`, а не обычный `codex`.
 
 **В)** `401 unauthorized` — токен протух, повторно запустите `bash setup.sh`. Если apiKeyHelper настроен (по умолчанию после setup), токен обновится автоматически.
 
-**Г)** `agclaude: command not found` после установки — не перезапустили терминал, PATH ещё не подхватился. Закройте и откройте заново. Если и после этого не находит — добавьте `~/.local/bin` в PATH вручную.
+**Г)** `agclaude: command not found` или `agcodex: command not found` после установки — не перезапустили терминал, PATH ещё не подхватился. Закройте и откройте заново. Если и после этого не находит — добавьте `~/.local/bin` в PATH вручную.
 
 **Д)** `apiKeyHelper` не срабатывает — если у вас выставлена переменная окружения `ANTHROPIC_AUTH_TOKEN`, она имеет приоритет над apiKeyHelper. Уберите её из системного окружения.
 
@@ -374,9 +383,10 @@ Superpowers — набор скилов для улучшения работы C
 | 6 | Git | `git --version` |
 | 7 | GitHub CLI | `gh --version` |
 | 8 | Claude CLI | `claude --version` |
-| 9 | Авторизация Claude | `claude auth status` |
-| 10 | MCP-плагины | `claude mcp list` |
-| 11 | Superpowers | Проверить в интерактивном режиме |
+| 9 | Codex wrapper | `agcodex --version` |
+| 10 | Авторизация Claude | `claude auth status` |
+| 11 | MCP-плагины | `claude mcp list` |
+| 12 | Superpowers | Проверить в интерактивном режиме |
 
 ### Быстрая проверка всего
 
@@ -426,6 +436,7 @@ Superpowers — набор скилов для улучшения работы C
 - Git
 - GitHub CLI (gh) — ТОЛЬКО установить, НЕ логинить в GitHub
 - Claude Code/CLI (claude)
+- Codex wrapper (agcodex через корпоративный прокси)
 - Авторизация в Claude
 - MCP-плагины: Context7, Playwright, Serena
 
@@ -475,7 +486,7 @@ C) Serena MCP:
 ШАГ 5 — Промежуточный отчёт
 Выведи статус:
 - VPN: подключен / не подключен
-- Установлено: brew, python3, node/npm, git, gh, uv, claude
+- Установлено: brew, python3, node/npm, git, gh, uv, claude, agcodex
 - Авторизация Claude: результат claude auth status
 - MCP-плагины: вывод claude mcp list
 
@@ -507,12 +518,13 @@ C) Serena MCP:
 5. Git (git --version)
 6. GitHub CLI (gh --version)
 7. Claude CLI (claude --version)
-8. Авторизация Claude (claude auth status)
-9. MCP-плагины (claude mcp list):
+8. Codex wrapper (agcodex --version)
+9. Авторизация Claude (claude auth status)
+10. MCP-плагины (claude mcp list):
    - Context7
    - Playwright
    - Serena
-10. Superpowers Skills — установлены?
+11. Superpowers Skills — установлены?
 
 Выведи итоговую таблицу со статусами.
 ```
