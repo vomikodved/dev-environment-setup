@@ -1,6 +1,6 @@
 # Dev Environment Setup (macOS)
 
-Руководство по настройке окружения для работы с Claude Code + MCP + Superpowers на macOS.
+Руководство по настройке окружения для работы с Claude Code + Codex + MCP + Superpowers на macOS.
 
 > **Версия для Windows:** [dev-environment-setup-windows](https://github.com/vomikodved/dev-environment-setup-windows)
 
@@ -12,14 +12,15 @@
 2. [Python](#2-python)
 3. [Node.js](#3-nodejs)
 4. [Claude Code](#4-claude-code)
-5. [Homebrew](#5-homebrew)
-6. [jq](#6-jq)
-7. [Авторизация в Claude](#7-авторизация-в-claude)
-8. [Git и GitHub CLI](#8-git-и-github-cli)
-9. [MCP-плагины](#9-mcp-плагины)
-10. [Superpowers Skills](#10-superpowers-skills)
-11. [Проверка окружения](#11-проверка-окружения)
-12. [Автоматическая установка (промпты)](#12-автоматическая-установка-промпты)
+5. [Codex CLI](#5-codex-cli)
+6. [Homebrew](#6-homebrew)
+7. [jq](#7-jq)
+8. [Авторизация и корпоративный прокси](#8-авторизация-и-корпоративный-прокси)
+9. [Git и GitHub CLI](#9-git-и-github-cli)
+10. [MCP-плагины](#10-mcp-плагины)
+11. [Superpowers Skills](#11-superpowers-skills)
+12. [Проверка окружения](#12-проверка-окружения)
+13. [Автоматическая установка (промпты)](#13-автоматическая-установка-промпты)
 
 ---
 
@@ -111,7 +112,37 @@ claude --version
 
 ---
 
-## 5. Homebrew
+## 5. Codex CLI
+
+Codex — второй основной CLI для работы через корпоративный LLM-прокси. Уровень поддержки такой же: установщик настраивает отдельную команду `agcodex`, токен и модели.
+
+### Установка
+
+Отдельный OpenAI API key не нужен. Достаточно корпоративного установщика из раздела [Авторизация и корпоративный прокси](#8-авторизация-и-корпоративный-прокси): он кладёт `agcodex` рядом с `agclaude` в `~/.local/bin`.
+
+Если нужен обычный `codex` без прокси — устанавливайте его отдельно по документации OpenAI. Для рабочего прокси-сценария используйте именно `agcodex`.
+
+### Проверка
+
+После запуска установщика и перезапуска терминала:
+
+```bash
+agcodex --version
+agcodex exec "ответь одним словом: ok"
+```
+
+Если команда отвечает — Codex через прокси настроен.
+
+### Сменить модель
+
+```bash
+agcodex --list-models
+agcodex --set-model gpt-5.5
+```
+
+---
+
+## 6. Homebrew
 
 Homebrew — пакетный менеджер для macOS.
 
@@ -142,9 +173,9 @@ brew update
 
 ---
 
-## 6. jq
+## 7. jq
 
-`jq` — утилита для работы с JSON, используется установщиком и обёртками (`agclaude`, `agopencode`).
+`jq` — утилита для работы с JSON, используется установщиком и обёртками (`agclaude`, `agcodex`, `agopencode`).
 
 ### Установка
 
@@ -160,82 +191,95 @@ jq --version
 
 ---
 
-## 7. Авторизация в Claude
+## 8. Авторизация и корпоративный прокси
 
 > **Используем корпоративный LLM-прокси `cc.sputnik.systems`.**
-> VPN **не нужен**, оплаченный Claude-аккаунт **не нужен** — нужен только GitHub-аккаунт, входящий в одну из двух организаций: [sputnik-systems](https://github.com/sputnik-systems) или [sputnik-asgardos](https://github.com/sputnik-asgardos).
+> VPN **не нужен**, оплаченный Claude/OpenAI-аккаунт **не нужен** — нужен только GitHub-аккаунт, входящий в одну из двух организаций: [sputnik-systems](https://github.com/sputnik-systems) или [sputnik-asgardos](https://github.com/sputnik-asgardos).
 
-> **Как понять, зарегистрированы ли вы на GitHub?** Откройте <https://github.com/login>. Если сможете войти под своим логином и паролем — у вас есть аккаунт. Если логина нет — зарегистрируйтесь на <https://github.com/join>, затем попросите в команде добавить вас в одну из организаций. Проверять членство заранее не обязательно — установщик ниже всё подскажет.
+> **Как понять, зарегистрированы ли вы на GitHub?** Откройте <https://github.com/login>. Если сможете войти под своим логином и паролем — у вас есть аккаунт. Если логина нет — зарегистрируйтесь на <https://github.com/join>, затем попросите в команде добавить вас в одну из организаций.
 
-### Порядок действий
+### Установка прокси-клиента
 
 1. Открыть Cursor.
 2. **ЗАКРЫТЬ окно диалога с Cursor (панель справа) — насовсем**.
 3. Открыть терминал в Cursor.
-4. Скачать установщик: открыть в браузере <https://bifrost.asgardos.ai:37620/platform/llm-proxy/setup.sh>. Браузер попросит войти через GitHub (нужен аккаунт в одной из организаций — `sputnik-systems` или `sputnik-asgardos`) и после входа покажет текст скрипта. Сохрани страницу как файл `setup.sh` (`File → Save Page As…` или `Cmd+S`).
-
-5. Запустить установщик — он проведёт авторизацию через GitHub и настроит Claude Code:
+4. Скачать установщик: открыть в браузере <https://bifrost.asgardos.ai:37620/platform/llm-proxy/setup.sh>. Браузер попросит войти через GitHub и после входа покажет текст скрипта. Сохраните страницу как файл `setup.sh` (`File → Save Page As…` или `Cmd+S`).
+5. Запустить установщик:
 
    ```bash
    bash setup.sh
    ```
 
-6. В терминале появится короткий код (например `WDJB-MJHT`) и ссылка `https://github.com/login/device`. Откройте ссылку, введите код, подтвердите.
-7. Дождитесь строки `Готово. Попробуй: agclaude -p 'hi'`. Установщик положил обёртки `agclaude` / `agcodex` / `agopencode` / `agcrush` в `~/.local/bin` и записал токен + конфиг в `~/.config/orchestra/` (default-модель `kimi/kimi-for-coding`).
+6. В терминале появится короткий код и ссылка `https://github.com/login/device`. Откройте ссылку, введите код, подтвердите.
+7. Дождитесь строки `Готово. Попробуй: agclaude -p 'hi'`.
 8. **Перезапустите терминал** — чтобы PATH обновился.
-9. Проверьте Claude Code через прокси:
 
-   ```bash
-   agclaude --proxy on    # включить прокси
-   agclaude --proxy off   # отключить (прямой Claude)
-   agclaude --proxy status
+Установщик настраивает сразу оба основных CLI:
 
-   agclaude -p "какую модель используешь"
-   ```
+| CLI | Команда | Для чего |
+|---|---|---|
+| Claude Code | `agclaude` | Claude Code через корпоративный прокси |
+| Codex | `agcodex` | OpenAI Codex CLI через корпоративный прокси |
 
-   Ожидаемый ответ содержит `kimi`, `deepseek`, `zai/glm` или другую модель прокси — значит Claude Code подключён.
+Также ставятся `agopencode` / `agcrush`, токен и конфиг в `~/.config/orchestra/`, а настройки Claude Code — в `~/.claude/settings.json`.
 
-10. Проверьте Codex через тот же прокси:
-
-   ```bash
-   agcodex --version
-   agcodex exec "ответь одним словом: ok"
-   ```
-
-   `agcodex` — это обёртка для OpenAI Codex CLI. Она использует тот же GitHub-токен и корпоративный LLM-прокси, поэтому отдельный OpenAI-аккаунт/API key не нужен. Модель для Codex выбирается прокси автоматически; если нужно сменить — используйте `agcodex --set-model <model>` или `agcodex --list-models`.
-
-### Сменить модель
+### Проверка Claude Code
 
 ```bash
-agclaude --set-model kimi/kimi-for-coding     # постоянная смена
-agclaude --model kimi/kimi-for-coding -p "…"  # разовая
+agclaude --proxy on
+agclaude --proxy status
+agclaude -p "какую модель используешь"
 ```
 
-Посмотреть актуальный список: `agclaude --list-models` (динамически с прокси).
+Ожидаемый ответ содержит `kimi`, `deepseek`, `zai/glm` или другую модель прокси.
 
-Классы моделей: `strongest` (DeepSeek-v4-pro / Kimi-for-coding, premium), `strong` (Kimi-for-coding / DeepSeek-v4-flash, recommended), `fast` (GLM-5-turbo / MiMo-v2-omni, cheap).
+### Проверка Codex
 
+```bash
+agcodex --version
+agcodex exec "ответь одним словом: ok"
+```
 
-> **`claude` тоже работает напрямую** — установщик настраивает `~/.claude/settings.json` с `apiKeyHelper` и `ANTHROPIC_BASE_URL`. Можно писать `claude -p "..."` вместо `agclaude -p "..."`. Токен обновляется автоматически при протухании.
+Если команда отвечает — Codex тоже идёт через корпоративный прокси. Отдельный OpenAI-аккаунт/API key не нужен.
+
+### Смена моделей
+
+Claude Code:
+
+```bash
+agclaude --list-models
+agclaude --set-model strong
+agclaude --model kimi/kimi-for-coding -p "…"
+```
+
+Codex:
+
+```bash
+agcodex --list-models
+agcodex --set-model gpt-5.5
+```
+
+Классы моделей: `strongest`, `strong`, `fast`. Актуальный список всегда смотрите через `--list-models`.
+
+> **`claude` тоже работает напрямую через прокси** — установщик настраивает `~/.claude/settings.json` с `apiKeyHelper` и `ANTHROPIC_BASE_URL`. Можно писать `claude -p "..."` вместо `agclaude -p "..."`. Для Codex используйте `agcodex`.
 
 ### Если не вышло
 
 **А)** В браузере `403` / `access denied` при входе или при вводе device-кода — GitHub-аккаунт не входит ни в `sputnik-systems`, ни в `sputnik-asgardos`. Напишите в `#dev`, чтобы добавили в одну из них.
 
-**Б)** `claude` работает, но отвечает как обычный Claude (не GLM/MiMo) — запустите `bash setup.sh` ещё раз (токен мог протухнуть или вы запускаете голый `claude` вместо `agclaude`). Для Codex используйте именно `agcodex`, а не обычный `codex`.
+**Б)** `claude` работает, но отвечает как обычный Claude (не GLM/MiMo) — запустите `bash setup.sh` ещё раз. Для Codex используйте именно `agcodex`, а не обычный `codex`.
 
-**В)** `401 unauthorized` — токен протух, повторно запустите `bash setup.sh`. Если apiKeyHelper настроен (по умолчанию после setup), токен обновится автоматически.
+**В)** `401 unauthorized` — токен протух, повторно запустите `bash setup.sh`. Если apiKeyHelper настроен, токен обновится автоматически.
 
 **Г)** `agclaude: command not found` или `agcodex: command not found` после установки — не перезапустили терминал, PATH ещё не подхватился. Закройте и откройте заново. Если и после этого не находит — добавьте `~/.local/bin` в PATH вручную.
 
-**Д)** `apiKeyHelper` не срабатывает — если у вас выставлена переменная окружения `ANTHROPIC_AUTH_TOKEN`, она имеет приоритет над apiKeyHelper. Уберите её из системного окружения.
+**Д)** `apiKeyHelper` не срабатывает — если выставлена переменная окружения `ANTHROPIC_AUTH_TOKEN`, она имеет приоритет над apiKeyHelper. Уберите её из системного окружения.
 
 **Е)** Если что-то остаётся непонятным или хочется пошаговый ручной путь — см. <https://github.com/sputnik-asgardos/llm-proxy/blob/main/CLAUDE_CODE_SETUP.md> (ручной, без установщика).
 
 ---
 
-
-## 8. Git и GitHub CLI
+## 9. Git и GitHub CLI
 
 ### Установка через Homebrew
 
@@ -254,7 +298,7 @@ gh --version
 
 ---
 
-## 9. MCP-плагины
+## 10. MCP-плагины
 
 MCP-плагины расширяют возможности Claude Code.
 
@@ -346,7 +390,7 @@ ls docs/CODEBASE_MAP.md
 
 ---
 
-## 10. Superpowers Skills
+## 11. Superpowers Skills
 
 Superpowers — набор скилов для улучшения работы Claude Code.
 
@@ -369,7 +413,7 @@ Superpowers — набор скилов для улучшения работы C
 
 ---
 
-## 11. Проверка окружения
+## 12. Проверка окружения
 
 ### Чек-лист
 
@@ -413,7 +457,7 @@ Superpowers — набор скилов для улучшения работы C
 
 ---
 
-## 12. Автоматическая установка (промпты)
+## 13. Автоматическая установка (промпты)
 
 Установка разделена на 2 этапа:
 - **Промпт 1** — для Cursor (установка всего до MCP-плагинов)
