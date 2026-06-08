@@ -128,7 +128,7 @@ Codex — второй основной CLI для работы через ко�
 
 ```bash
 agcodex --version
-agcodex exec "ответь одним словом: ok" --skip-git-repo-check
+agcodex --list-models
 ```
 
 Если команда отвечает — Codex через прокси настроен.
@@ -237,7 +237,7 @@ agclaude -p "какую модель используешь"
 
 ```bash
 agcodex --version
-agcodex exec "ответь одним словом: ok" --skip-git-repo-check
+agcodex --list-models
 ```
 
 Если команда отвечает — Codex тоже идёт через корпоративный прокси. Отдельный OpenAI-аккаунт/API key не нужен.
